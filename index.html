@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="NebulaBit Studios — ブラウザベースのゲームを開発するインディーゲームスタジオ">
+<title>NebulaBit Studios</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #080810;
+    --bg2: #0e0e1a;
+    --bg3: #13131f;
+    --border: rgba(255,255,255,0.07);
+    --border2: rgba(255,255,255,0.12);
+    --text: #f0effe;
+    --text2: rgba(240,239,254,0.55);
+    --text3: rgba(240,239,254,0.3);
+    --accent: #7F77DD;
+    --accent2: #534AB7;
+    --accent-glow: rgba(127,119,221,0.15);
+    --green: #1D9E75;
+    --green-bg: rgba(29,158,117,0.12);
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 16px;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  /* --- NAV --- */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 2.5rem; height: 64px;
+    background: rgba(8,8,16,0.8);
+    backdrop-filter: blur(12px);
+    border-bottom: 0.5px solid var(--border);
+  }
+  .logo {
+    font-family: 'Syne', sans-serif;
+    font-size: 17px; font-weight: 700; letter-spacing: 0.03em;
+    color: var(--text); text-decoration: none;
+  }
+  .logo em { color: var(--accent); font-style: normal; }
+  .nav-links { display: flex; gap: 2rem; list-style: none; }
+  .nav-links a {
+    font-size: 13px; color: var(--text2); text-decoration: none;
+    letter-spacing: 0.04em; transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--text); }
+  .nav-cta {
+    font-size: 13px; padding: 7px 18px;
+    background: var(--accent); color: #fff; border-radius: 6px;
+    text-decoration: none; font-family: 'Syne', sans-serif; font-weight: 600;
+    letter-spacing: 0.03em; transition: background 0.2s, transform 0.15s;
+  }
+  .nav-cta:hover { background: #9991e8; transform: translateY(-1px); }
+
+  /* --- HERO --- */
+  .hero {
+    min-height: 100vh; display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    padding: 8rem 2rem 5rem; text-align: center;
+    position: relative; overflow: hidden;
+  }
+  .hero-bg {
+    position: absolute; inset: 0; z-index: 0;
+    background:
+      radial-gradient(ellipse 60% 50% at 50% 0%, rgba(83,74,183,0.18) 0%, transparent 70%),
+      radial-gradient(ellipse 40% 40% at 20% 80%, rgba(29,158,117,0.08) 0%, transparent 60%);
+  }
+  .hero-grid {
+    position: absolute; inset: 0; z-index: 0; opacity: 0.06;
+    background-image:
+      linear-gradient(rgba(127,119,221,0.5) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(127,119,221,0.5) 1px, transparent 1px);
+    background-size: 60px 60px;
+    mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 80%);
+  }
+  .hero > * { position: relative; z-index: 1; }
+  .hero-tag {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--accent); border: 0.5px solid rgba(127,119,221,0.3);
+    padding: 5px 14px; border-radius: 20px;
+    background: rgba(127,119,221,0.08);
+    margin-bottom: 2rem;
+    animation: fadeUp 0.8s ease both;
+  }
+  .hero-tag span { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); }
+  .hero h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(3rem, 8vw, 6rem);
+    font-weight: 800; line-height: 1.05; letter-spacing: -0.02em;
+    color: var(--text);
+    animation: fadeUp 0.8s 0.1s ease both;
+  }
+  .hero h1 .accent-word { color: var(--accent); }
+  .hero-sub {
+    font-size: 17px; color: var(--text2); max-width: 480px;
+    margin: 1.5rem auto 2.5rem; font-weight: 300;
+    animation: fadeUp 0.8s 0.2s ease both;
+  }
+  .hero-buttons {
+    display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;
+    animation: fadeUp 0.8s 0.3s ease both;
+  }
+  .btn-primary {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 12px 28px; background: var(--accent); color: #fff;
+    border-radius: 8px; font-family: 'Syne', sans-serif; font-weight: 600;
+    font-size: 14px; letter-spacing: 0.03em; text-decoration: none;
+    transition: background 0.2s, transform 0.15s;
+    border: none; cursor: pointer;
+  }
+  .btn-primary:hover { background: #9991e8; transform: translateY(-2px); }
+  .btn-secondary {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 12px 28px; background: transparent; color: var(--text2);
+    border: 0.5px solid var(--border2); border-radius: 8px;
+    font-family: 'Syne', sans-serif; font-weight: 600;
+    font-size: 14px; letter-spacing: 0.03em; text-decoration: none;
+    transition: color 0.2s, border-color 0.2s, transform 0.15s;
+  }
+  .btn-secondary:hover { color: var(--text); border-color: var(--accent); transform: translateY(-2px); }
+  .hero-scroll {
+    position: absolute; bottom: 2.5rem; left: 50%; transform: translateX(-50%);
+    display: flex; flex-direction: column; align-items: center; gap: 6px;
+    font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--text3);
+    animation: fadeUp 0.8s 0.5s ease both;
+  }
+  .scroll-line {
+    width: 1px; height: 40px;
+    background: linear-gradient(to bottom, var(--accent), transparent);
+    animation: scrollPulse 2s ease-in-out infinite;
+  }
+
+  /* --- SECTION BASE --- */
+  section { padding: 6rem 2rem; }
+  .container { max-width: 1060px; margin: 0 auto; }
+  .section-head { margin-bottom: 3rem; }
+  .section-eyebrow {
+    font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 0.75rem; display: block;
+  }
+  .section-title {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(1.8rem, 4vw, 2.8rem);
+    font-weight: 700; line-height: 1.15; letter-spacing: -0.01em;
+  }
+  .section-desc { font-size: 15px; color: var(--text2); margin-top: 0.75rem; max-width: 520px; font-weight: 300; }
+  .divider { border: none; border-top: 0.5px solid var(--border); margin: 0; }
+
+  /* --- GAMES --- */
+  .games-section { background: var(--bg); }
+  .games-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+  .game-card {
+    background: var(--bg2); border: 0.5px solid var(--border);
+    border-radius: 16px; overflow: hidden;
+    transition: border-color 0.3s, transform 0.3s;
+    position: relative;
+  }
+  .game-card:hover { border-color: rgba(127,119,221,0.3); transform: translateY(-4px); }
+  .game-thumb {
+    height: 200px; position: relative; overflow: hidden;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .game-thumb-startup {
+    background: linear-gradient(135deg, #1a1535 0%, #2d2568 50%, #3C3489 100%);
+  }
+  .game-thumb-coming {
+    background: linear-gradient(135deg, #111118 0%, #1a1a24 100%);
+  }
+  .thumb-pattern {
+    position: absolute; inset: 0; opacity: 0.15;
+    background-image: repeating-linear-gradient(
+      45deg, transparent, transparent 20px,
+      rgba(127,119,221,0.4) 20px, rgba(127,119,221,0.4) 21px
+    );
+  }
+  .thumb-glow {
+    position: absolute; width: 200px; height: 200px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(127,119,221,0.3), transparent 70%);
+    top: 50%; left: 50%; transform: translate(-50%, -50%);
+  }
+  .thumb-title {
+    position: relative; z-index: 1;
+    font-family: 'Syne', sans-serif; font-size: 28px; font-weight: 800;
+    color: rgba(255,255,255,0.9); letter-spacing: -0.01em;
+  }
+  .thumb-title-coming {
+    font-family: 'Syne', sans-serif; font-size: 14px;
+    color: rgba(255,255,255,0.25); letter-spacing: 0.2em; text-transform: uppercase;
+    position: relative; z-index: 1;
+  }
+  .game-badge {
+    position: absolute; top: 14px; right: 14px; z-index: 2;
+    font-size: 11px; padding: 4px 12px; border-radius: 20px;
+    font-weight: 500; letter-spacing: 0.05em;
+  }
+  .badge-live { background: var(--green-bg); color: #4ecfa0; border: 0.5px solid rgba(29,158,117,0.3); }
+  .badge-dev { background: rgba(255,255,255,0.05); color: var(--text3); border: 0.5px solid var(--border); }
+  .game-info { padding: 1.25rem 1.5rem 1.5rem; }
+  .game-info h3 {
+    font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 700;
+    margin-bottom: 8px; letter-spacing: -0.01em;
+  }
+  .game-info p { font-size: 13px; color: var(--text2); line-height: 1.7; margin-bottom: 1.25rem; font-weight: 300; }
+  .game-link {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 13px; color: var(--accent); text-decoration: none;
+    font-family: 'Syne', sans-serif; font-weight: 600; letter-spacing: 0.03em;
+    transition: gap 0.2s;
+  }
+  .game-link:hover { gap: 10px; }
+  .game-link-muted { color: var(--text3); cursor: default; }
+  .game-link svg { width: 14px; height: 14px; }
+
+  /* --- ABOUT --- */
+  .about-section { background: var(--bg2); }
+  .about-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; }
+  .about-card {
+    padding: 1.5rem; background: var(--bg3);
+    border: 0.5px solid var(--border); border-radius: 12px;
+    transition: border-color 0.3s;
+  }
+  .about-card:hover { border-color: rgba(127,119,221,0.25); }
+  .about-icon {
+    width: 40px; height: 40px; border-radius: 10px;
+    background: var(--accent-glow); border: 0.5px solid rgba(127,119,221,0.2);
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 1rem;
+    color: var(--accent); font-size: 18px;
+  }
+  .about-card h4 {
+    font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 700;
+    margin-bottom: 6px; letter-spacing: 0.02em;
+  }
+  .about-card p { font-size: 13px; color: var(--text2); line-height: 1.7; font-weight: 300; }
+
+  /* --- NEWS --- */
+  .news-section { background: var(--bg); }
+  .news-list { display: flex; flex-direction: column; gap: 0; }
+  .news-item {
+    display: flex; gap: 2rem; align-items: flex-start;
+    padding: 1.5rem 0; border-bottom: 0.5px solid var(--border);
+  }
+  .news-item:first-child { border-top: 0.5px solid var(--border); }
+  .news-date {
+    font-size: 12px; color: var(--text3); white-space: nowrap;
+    min-width: 90px; font-family: 'Syne', sans-serif; letter-spacing: 0.05em;
+    padding-top: 2px;
+  }
+  .news-content { flex: 1; }
+  .news-tag {
+    display: inline-block; font-size: 10px; letter-spacing: 0.1em;
+    text-transform: uppercase; padding: 2px 10px; border-radius: 20px;
+    background: var(--accent-glow); color: var(--accent);
+    border: 0.5px solid rgba(127,119,221,0.2);
+    margin-bottom: 6px;
+  }
+  .news-content h4 {
+    font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 600;
+    margin-bottom: 4px; letter-spacing: -0.01em;
+  }
+  .news-content p { font-size: 13px; color: var(--text2); font-weight: 300; }
+
+  /* --- CONTACT --- */
+  .contact-section { background: var(--bg2); }
+  .contact-layout { display: grid; grid-template-columns: 1fr 1.4fr; gap: 4rem; align-items: start; }
+  .contact-info h3 {
+    font-family: 'Syne', sans-serif; font-size: 20px; font-weight: 700;
+    margin-bottom: 1rem; letter-spacing: -0.01em;
+  }
+  .contact-info p { font-size: 14px; color: var(--text2); font-weight: 300; line-height: 1.8; margin-bottom: 2rem; }
+  .sns-list { display: flex; flex-direction: column; gap: 10px; }
+  .sns-item {
+    display: flex; align-items: center; gap: 12px;
+    padding: 12px 16px; border-radius: 10px;
+    background: var(--bg3); border: 0.5px solid var(--border);
+    text-decoration: none; color: var(--text2);
+    font-size: 13px; font-weight: 400;
+    transition: border-color 0.2s, color 0.2s;
+  }
+  .sns-item:hover { border-color: rgba(127,119,221,0.3); color: var(--text); }
+  .sns-icon { width: 28px; height: 28px; border-radius: 7px; display: flex; align-items: center; justify-content: center; font-size: 14px; }
+  .sns-x { background: #111; border: 0.5px solid rgba(255,255,255,0.1); }
+  .sns-yt { background: rgba(255,0,0,0.12); border: 0.5px solid rgba(255,0,0,0.15); }
+  .sns-tt { background: rgba(0,242,234,0.08); border: 0.5px solid rgba(0,242,234,0.12); }
+  .form-group { margin-bottom: 16px; }
+  .form-group label {
+    display: block; font-size: 12px; letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--text3); margin-bottom: 8px;
+    font-family: 'Syne', sans-serif;
+  }
+  .form-group input, .form-group textarea, .form-group select {
+    width: 100%; padding: 11px 14px;
+    background: var(--bg3); border: 0.5px solid var(--border);
+    border-radius: 8px; color: var(--text);
+    font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 300;
+    outline: none; transition: border-color 0.2s;
+    appearance: none;
+  }
+  .form-group input:focus, .form-group textarea:focus, .form-group select:focus {
+    border-color: rgba(127,119,221,0.5);
+  }
+  .form-group input::placeholder, .form-group textarea::placeholder { color: var(--text3); }
+  .form-group textarea { height: 110px; resize: vertical; }
+  .form-group select option { background: var(--bg2); }
+
+  /* --- FOOTER --- */
+  footer {
+    padding: 2rem 2.5rem;
+    border-top: 0.5px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+    flex-wrap: wrap; gap: 12px;
+  }
+  .footer-logo {
+    font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 700;
+    color: var(--text2); text-decoration: none;
+  }
+  .footer-logo em { color: var(--accent); font-style: normal; }
+  footer p { font-size: 12px; color: var(--text3); }
+  .footer-links { display: flex; gap: 1.5rem; }
+  .footer-links a { font-size: 12px; color: var(--text3); text-decoration: none; transition: color 0.2s; }
+  .footer-links a:hover { color: var(--text2); }
+
+  /* --- ANIMATIONS --- */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes scrollPulse {
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 1; }
+  }
+  .fade-in { opacity: 0; transform: translateY(24px); transition: opacity 0.7s ease, transform 0.7s ease; }
+  .fade-in.visible { opacity: 1; transform: none; }
+
+  /* --- RESPONSIVE --- */
+  @media (max-width: 768px) {
+    nav { padding: 0 1.25rem; }
+    .nav-links { display: none; }
+    section { padding: 4rem 1.25rem; }
+    .contact-layout { grid-template-columns: 1fr; gap: 2.5rem; }
+    footer { flex-direction: column; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="logo">Nebula<em>Bit</em> Studios</a>
+  <ul class="nav-links">
+    <li><a href="#games">Games</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#news">News</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <a href="https://startupzero-two.vercel.app/" target="_blank" class="nav-cta">Play Now →</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <span class="hero-tag"><span></span> Independent Game Studio</span>
+  <h1>We build<br><span class="accent-word">browser games</span><br>worth playing.</h1>
+  <p class="hero-sub">戦略と判断が問われるゲームを、インストール不要のブラウザで。どこからでも、すぐに。</p>
+  <div class="hero-buttons">
+    <a href="https://startupzero-two.vercel.app/" target="_blank" class="btn-primary">Play StartupZero →</a>
+    <a href="#about" class="btn-secondary">Our Studio</a>
+  </div>
+  <div class="hero-scroll">
+    <div class="scroll-line"></div>
+    Scroll
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- GAMES -->
+<section id="games" class="games-section">
+  <div class="container">
+    <div class="section-head fade-in">
+      <span class="section-eyebrow">Our Games</span>
+      <h2 class="section-title">Titles</h2>
+      <p class="section-desc">現在リリース中のタイトルと、開発中の新作。</p>
+    </div>
+    <div class="games-grid">
+      <div class="game-card fade-in">
+        <div class="game-thumb game-thumb-startup">
+          <div class="thumb-pattern"></div>
+          <div class="thumb-glow"></div>
+          <span class="thumb-title">StartupZero</span>
+          <span class="game-badge badge-live">● Live</span>
+        </div>
+        <div class="game-info">
+          <h3>StartupZero</h3>
+          <p>創業者として資金・売上・ユーザー・チームを管理しながら事業成長を目指すブラウザ経営シミュレーション。業界選択、創業者タイプ、ランダムイベント、分析機能により毎回異なる起業体験を楽しめます。</p>
+          <a href="https://startupzero-two.vercel.app/" target="_blank" class="game-link">
+            Play now
+            <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 7h10M7 2l5 5-5 5"/></svg>
+          </a>
+        </div>
+      </div>
+      <div class="game-card fade-in">
+        <div class="game-thumb game-thumb-coming">
+          <div class="thumb-pattern"></div>
+          <span class="thumb-title-coming">Next Title</span>
+          <span class="game-badge badge-dev">In Development</span>
+        </div>
+        <div class="game-info">
+          <h3>Coming Soon</h3>
+          <p>現在開発中の新タイトルです。続報はSNSにてお知らせします。</p>
+          <span class="game-link game-link-muted">Stay tuned</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- ABOUT -->
+<section id="about" class="about-section">
+  <div class="container">
+    <div class="section-head fade-in">
+      <span class="section-eyebrow">About Us</span>
+      <h2 class="section-title">Studio</h2>
+      <p class="section-desc">NebulaBit Studiosは、ブラウザで遊べる戦略・シミュレーションゲームを開発するインディーゲームスタジオです。</p>
+    </div>
+    <div class="about-grid">
+      <div class="about-card fade-in">
+        <div class="about-icon">🌐</div>
+        <h4>Browser-first</h4>
+        <p>インストール不要。ブラウザさえあればどのデバイスからでも即プレイ。</p>
+      </div>
+      <div class="about-card fade-in">
+        <div class="about-icon">🧠</div>
+        <h4>Strategy-focused</h4>
+        <p>思考と判断が問われるシミュレーション・戦略ゲームを中心に開発。</p>
+      </div>
+      <div class="about-card fade-in">
+        <div class="about-icon">🔄</div>
+        <h4>Always updating</h4>
+        <p>プレイヤーのフィードバックをもとに継続的にアップデート。</p>
+      </div>
+      <div class="about-card fade-in">
+        <div class="about-icon">🚀</div>
+        <h4>Indie spirit</h4>
+        <p>小さなチームだからこそ、尖ったアイデアを素早く形にできる。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- NEWS -->
+<section id="news" class="news-section">
+  <div class="container">
+    <div class="section-head fade-in">
+      <span class="section-eyebrow">Latest</span>
+      <h2 class="section-title">News</h2>
+    </div>
+    <div class="news-list">
+      <div class="news-item fade-in">
+        <span class="news-date">2026.05.07</span>
+        <div class="news-content">
+          <span class="news-tag">Release</span>
+          <h4>StartupZero 正式版を公開</h4>
+          <p>ブラウザ経営シミュレーション「StartupZero」の正式版を公開しました。</p>
+        </div>
+      </div>
+      <div class="news-item fade-in">
+        <span class="news-date">2026.05.07</span>
+        <div class="news-content">
+          <span class="news-tag">Studio</span>
+          <h4>NebulaBit Studios 設立</h4>
+          <p>インディーゲームスタジオ NebulaBit Studios を設立しました。今後もゲームを制作・公開していきます。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- CONTACT -->
+<section id="contact" class="contact-section">
+  <div class="container">
+    <div class="section-head fade-in">
+      <span class="section-eyebrow">Get in Touch</span>
+      <h2 class="section-title">Contact</h2>
+    </div>
+    <div class="contact-layout">
+      <div class="contact-info fade-in">
+        <h3>お気軽にご連絡ください</h3>
+        <p>ゲームへのご意見・ご感想、バグ報告、コラボレーションのご相談など、お気軽にどうぞ。</p>
+        <div class="sns-list">
+          <a href="https://twitter.com/" target="_blank" class="sns-item">
+            <div class="sns-icon sns-x">𝕏</div>
+            X (Twitter)
+          </a>
+          <a href="https://youtube.com/" target="_blank" class="sns-item">
+            <div class="sns-icon sns-yt">▶</div>
+            YouTube
+          </a>
+          <a href="https://tiktok.com/" target="_blank" class="sns-item">
+            <div class="sns-icon sns-tt">♪</div>
+            TikTok
+          </a>
+        </div>
+      </div>
+      <div class="fade-in">
+        <form onsubmit="handleSubmit(event)">
+          <div class="form-group">
+            <label>お名前</label>
+            <input type="text" placeholder="山田 太郎" required>
+          </div>
+          <div class="form-group">
+            <label>メールアドレス</label>
+            <input type="email" placeholder="your@email.com" required>
+          </div>
+          <div class="form-group">
+            <label>件名</label>
+            <select>
+              <option>ゲームへのご意見・ご感想</option>
+              <option>バグ報告</option>
+              <option>コラボレーション</option>
+              <option>その他</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>メッセージ</label>
+            <textarea placeholder="メッセージをご入力ください" required></textarea>
+          </div>
+          <button type="submit" class="btn-primary">Send message →</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <a href="#" class="footer-logo">Nebula<em>Bit</em> Studios</a>
+  <p>© 2026 NebulaBit Studios. All rights reserved.</p>
+  <div class="footer-links">
+    <a href="#">Privacy Policy</a>
+    <a href="#">Terms</a>
+  </div>
+</footer>
+
+<script>
+  // Scroll animation
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => entry.target.classList.add('visible'), i * 80);
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+  // Form submit placeholder
+  function handleSubmit(e) {
+    e.preventDefault();
+    const btn = e.target.querySelector('button[type="submit"]');
+    btn.textContent = '✓ Sent!';
+    btn.style.background = '#1D9E75';
+    setTimeout(() => { btn.textContent = 'Send message →'; btn.style.background = ''; }, 3000);
+  }
+</script>
+</body>
+</html>
